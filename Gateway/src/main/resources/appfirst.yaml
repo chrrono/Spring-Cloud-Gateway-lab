@@ -1,0 +1,9 @@
+
+    spring:
+        cloud:
+            gateway:
+                routes:
+                    - id: employees
+                      uri: lb://peopleops
+                      predicates:
+                        - Path=/employees

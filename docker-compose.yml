@@ -1,0 +1,140 @@
+version: "3"
+services:
+    redis:
+        image: "redis:latest"
+        ports:
+            - "6379:6379"
+        networks:
+            - spring-cloud-network
+    discovery_server:
+        container_name: discovery-server
+        hostname: eureka-server
+        build:
+            context: .
+            dockerfile: Dockerfile
+            args:
+                INSTANCE : REGISTRY-1
+                PORT : 8761
+                GRADLE_PATH : './Registry'
+        image: discovery_server:latest
+        ports:
+            - 8761:8761
+        networks:
+            - spring-cloud-network
+    config_server:
+        container_name:  config_server
+        build: 
+            context: .
+            dockerfile: Dockerfile
+            args:
+                INSTANCE : CONFIG-1
+                PORT : 8888
+                GRADLE_PATH : './ConfigServer'
+        image: config_server:latest
+        ports:
+            - 8888:8888
+        environment:
+            eureka.client.serviceUrl.defaultZone: http://eureka-server:8761/eureka
+        networks:
+            - spring-cloud-network
+    production_service_1:
+        container_name: production_service_1
+        build: 
+            context: .
+            dockerfile: Dockerfile
+            args:
+                INSTANCE : PROD-1
+                PORT : 9021
+                GRADLE_PATH : './Production'
+        image: production_service_1:latest
+        environment:
+            eureka.client.serviceUrl.defaultZone: http://eureka-server:8761/eureka
+        ports:
+            - 9021:9021
+        
+        networks:
+            - spring-cloud-network
+    production_service_2:
+        container_name: production_service_2
+        build: 
+            context: .
+            dockerfile: Dockerfile
+            args:
+                INSTANCE : PROD-2
+                PORT : 9022
+                GRADLE_PATH : './Production'
+        image: production_service_2:latest
+        ports:
+            - 9022:9022
+        environment:
+            eureka.client.serviceUrl.defaultZone: http://eureka-server:8761/eureka
+        networks:
+            - spring-cloud-network
+    peopleops_service:
+        container_name: peopleops_service
+        build: 
+            context: .
+            dockerfile: Dockerfile
+            args:
+                INSTANCE : PEPOPS_1
+                PORT : 9011
+                GRADLE_PATH : './PeopleOps'
+        image: peopleops_service:latest
+        ports:
+            - 9011:9011
+        environment:
+            eureka.client.serviceUrl.defaultZone: http://eureka-server:8761/eureka
+        networks:
+            - spring-cloud-network
+    marketing_service:
+        container_name: marketing_service
+        build: 
+            context: .
+            dockerfile: Dockerfile
+            args:
+                INSTANCE : MARK_1
+                PORT : 9013
+                GRADLE_PATH : './Marketing'
+        image: marketing_service:latest
+        ports:
+            - 9013:9013
+        environment:
+            eureka.client.serviceUrl.defaultZone: http://eureka-server:8761/eureka
+        networks:
+            - spring-cloud-network
+    gateway_service_1:
+        container_name: gateway_service_1
+        build: 
+            context: ./gateway
+            dockerfile: Dockerfile
+            args:
+                INSTANCE : GATEWAY-1
+                PORT : 9000
+                GRADLE_PATH : './Gateway'
+        image: gateway_service_1:latest
+        ports:
+            - 9000:9000
+        environment:
+            eureka.client.serviceUrl.defaultZone: http://eureka-server:8761/eureka
+        networks:
+            - spring-cloud-network
+    gateway_service_2:
+        container_name: gateway_service_2
+        build: 
+            context: ./Gateway
+            dockerfile: Dockerfile
+            args:
+                INSTANCE : GATEWAY-2
+                PORT : 9001
+                GRADLE_PATH : './Gateway'
+        image: gateway_service_2:latest
+        ports:
+            - 9001:9001
+        environment:
+            eureka.client.serviceUrl.defaultZone: http://eureka-server:8761/eureka
+        networks:
+            - spring-cloud-network
+    
+networks:
+    spring-cloud-network:
+        driver: bridge
