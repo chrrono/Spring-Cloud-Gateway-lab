@@ -10,5 +10,4 @@ RUN gradle build -x test --no-daemon
 EXPOSE ${PORT}
 RUN mkdir /app
 RUN cp /home/gradle/src/build/libs/*SNAPSHOT.jar /app/spring-boot-app.jar
-RUN sleep 90
 ENTRYPOINT ["java", "-jar","/app/spring-boot-app.jar"]

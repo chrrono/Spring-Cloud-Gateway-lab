@@ -11,5 +11,5 @@ RUN mkdir /app
 RUN cp /home/gradle/src/build/libs/*SNAPSHOT.jar /app/spring-boot-app.jar
 RUN touch /home/startupWithDelay.sh
 RUN chmod 777 /home/startupWithDelay.sh
-RUN echo $'#!/bin/bash\n sleep 90;\n java -jar /app/spring-boot-app.jar;\n while true; do sleep 1000; done' >> /home/startupWithDelay.sh
+RUN echo $'#!/bin/bash\n sleep 120;\n java -jar /app/spring-boot-app.jar' >> /home/startupWithDelay.sh
 ENTRYPOINT ["sh","/home/startupWithDelay.sh"]

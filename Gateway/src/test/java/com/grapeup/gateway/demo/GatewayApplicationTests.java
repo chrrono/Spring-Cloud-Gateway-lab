@@ -65,6 +65,7 @@ class GatewayApplicationTests {
 		return () -> {
 			int statusCode = given()
 					.when()
+					.log().all()
 					.header("Host", hostName)
 					.get(destinationUrl)
 					.then()

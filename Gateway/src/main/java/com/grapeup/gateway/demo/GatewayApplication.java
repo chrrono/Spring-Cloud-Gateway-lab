@@ -18,28 +18,6 @@ public class GatewayApplication {
 		SpringApplication.run(GatewayApplication.class, args);
 	}
 
-
-//	@Bean
-//	RouteLocator routeLocatorToPeopleOpsService(RouteLocatorBuilder routeLocatorBuilder) {
-//		return routeLocatorBuilder
-//				.routes()
-//				.route(routeSpec -> routeSpec
-//						.path("/employees")
-//						.filters(gatewayFilterSpec -> gatewayFilterSpec
-//								.rewritePath("/employees", "/employees/v2"))
-//						.uri("lb://peopleops"))
-//				.build();
-//	}
-
-//	@Bean
-//	RouteLocator routeToMarketingService(RouteLocatorBuilder routeLocatorBuilder) {
-//		return routeLocatorBuilder
-//				.routes()
-//				.route(routeSpec )
-//				.build();
-//	}
-
-
 	@Bean
 	RouteLocator routeLocatorToPeopleOpsService(RouteLocatorBuilder routeLocatorBuilder) {
 		return routeLocatorBuilder
@@ -92,5 +70,25 @@ public class GatewayApplication {
 				.getHost()
 				.getHostName());
 	}
+
+//	@Bean
+//	RouteLocator routeLocatorToPeopleOpsService(RouteLocatorBuilder routeLocatorBuilder) {
+//		return routeLocatorBuilder
+//				.routes()
+//				.route(routeSpec -> routeSpec
+//						.path("/employees")
+//						.filters(gatewayFilterSpec -> gatewayFilterSpec
+//								.rewritePath("/employees", "/employees/v2"))
+//						.uri("lb://peopleops"))
+//				.build();
+//	}
+
+//	@Bean
+//	RouteLocator routeToMarketingService(RouteLocatorBuilder routeLocatorBuilder) {
+//		return routeLocatorBuilder
+//				.routes()
+//				.route(routeSpec )
+//				.build();
+//	}
 
 }

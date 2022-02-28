@@ -21,8 +21,8 @@ services:
             - 8761:8761
         networks:
             - spring-cloud-network
-    config_server:
-        container_name:  config_server
+    configserver:
+        container_name:  configserver
         build: 
             context: .
             dockerfile: Dockerfile
@@ -30,7 +30,7 @@ services:
                 INSTANCE : CONFIG-1
                 PORT : 8888
                 GRADLE_PATH : './ConfigServer'
-        image: config_server:latest
+        image: configserver:latest
         ports:
             - 8888:8888
         environment:
@@ -116,6 +116,11 @@ services:
             - 9000:9000
         environment:
             eureka.client.serviceUrl.defaultZone: http://eureka-server:8761/eureka
+            spring.config.import: configserver:http://configserver:8888
+            spring.redis.host: redis
+        depends_on:
+            - configserver
+            - redis
         networks:
             - spring-cloud-network
     gateway_service_2:
@@ -132,6 +137,11 @@ services:
             - 9001:9001
         environment:
             eureka.client.serviceUrl.defaultZone: http://eureka-server:8761/eureka
+            spring.config.import: configserver:http://configserver:8888
+            spring.redis.host: redis
+        depends_on:
+            - configserver
+            - redis
         networks:
             - spring-cloud-network
     
