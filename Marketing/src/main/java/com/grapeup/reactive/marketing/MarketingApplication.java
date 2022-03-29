@@ -33,33 +33,31 @@ public class MarketingApplication {
 					"https://grapeup.com/blog/kafka-transactions-integrating-with-legacy-systems/")
 	};
 
-	private AtomicInteger incrementer = new AtomicInteger(0);
+	private final AtomicInteger counter = new AtomicInteger(0);
 
 	private final Flux<Article> articlesStream = Flux.fromStream(
-					Stream.generate(() -> ARTICLES[incrementer.getAndIncrement() % ARTICLES.length]))
+					Stream.generate(() -> ARTICLES[counter.getAndIncrement() % ARTICLES.length]))
 			.delayElements(Duration.ofMillis(4000));
 
 	@Bean
 	Flux<Article> articles() {
 		return this.articlesStream.publish().autoConnect();
 	}
-
 }
 
 @RestController
 class ReactiveArticlesController {
 
-	@Autowired
-	private Flux<Article> articles;
+	private final Flux<Article> articles;
 
-	@GetMapping(
-			produces = MediaType.TEXT_EVENT_STREAM_VALUE,
-			value = "/articles"
-	)
+	public ReactiveArticlesController(Flux<Article> articles) {
+		this.articles = articles;
+	}
+
+	@GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE, value = "/articles")
 	public Flux<Article> getArticles() {
 		return this.articles;
 	}
-
 }
 
 
